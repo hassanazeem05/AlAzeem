@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AL AZEEM - Cart</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #111;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        background-color: #222;
+        padding: 10px;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+      }
+      .cart {
+        margin: 20px;
+        padding: 20px;
+        background-color: #222;
+        border-radius: 10px;
+      }
+      .cart-item {
+        border-bottom: 1px solid #444;
+        padding: 10px 0;
+      }
+      .checkout-button {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: white;
+        color: black;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>AL AZEEM</header>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html">Login</a>
+    </nav>
+
+    <div class="cart" id="cart-items">
+      <h2>Your Cart</h2>
+      <!-- Cart items will appear here -->
+    </div>
+
+    <button class="checkout-button" onclick="goToCheckout()">Proceed to Checkout</button>
+
+    <script>
+      function loadCart() {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const container = document.getElementById("cart-items");
+
+        let total = 0;
+        if (cart.length === 0) {
+          container.innerHTML += "<p>Your cart is empty.</p>";
+        } else {
+          cart.forEach((item) => {
+            total += parseFloat(item.price || 0);
+            const div = document.createElement("div");
+            div.className = "cart-item";
+            div.innerHTML = `<strong>${item.name}</strong> - Rs ${item.price}`;
+            container.appendChild(div);
+          });
+          const totalDiv = document.createElement("div");
+          totalDiv.innerHTML = `<br><strong>Total: Rs ${total.toFixed(2)}</strong>`;
+          container.appendChild(totalDiv);
+        }
+      }
+
+      function goToCheckout() {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const total = cart.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
+        const products = cart.map((item) => item.name).join(", ");
+        const checkoutUrl = `checkout.html?product=${encodeURIComponent(products)}&total=${total.toFixed(2)}`;
+        window.location.href = checkoutUrl;
+      }
+
+      window.onload = loadCart;
+    </script>
+  </body>
+</html>
