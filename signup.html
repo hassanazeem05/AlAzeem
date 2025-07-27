@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AL AZEEM - Sign Up</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      h2 {
+        margin-bottom: 20px;
+      }
+      form {
+        background-color: #222;
+        padding: 30px;
+        border-radius: 10px;
+        width: 300px;
+      }
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+      }
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .link {
+        margin-top: 15px;
+        text-align: center;
+      }
+      .link a {
+        color: white;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Create an Account</h2>
+    <form id="signup-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="submit" value="Sign Up" />
+    </form>
+    <div class="link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+
+    <script>
+      document.getElementById("signup-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        google.script.run
+          .withSuccessHandler(function (response) {
+            if (response === "success") {
+              alert("Signup successful!");
+              window.location.href = "index.html";
+            } else {
+              alert("Signup failed. Please try again.");
+            }
+          })
+          .saveLogin(email, password);
+      });
+    </script>
+  </body>
+</html>
