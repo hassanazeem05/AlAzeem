@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AL AZEEM - Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      h2 {
+        margin-bottom: 20px;
+      }
+      form {
+        background-color: #222;
+        padding: 30px;
+        border-radius: 10px;
+        width: 300px;
+      }
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+      }
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .link {
+        margin-top: 15px;
+        text-align: center;
+      }
+      .link a {
+        color: white;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Login to AL AZEEM</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="submit" value="Login" />
+    </form>
+    <div class="link">
+      New here? <a href="Signup.html">Sign Up</a>
+    </div>
+
+    <script>
+      document.getElementById("login-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        google.script.run
+          .withSuccessHandler(function (response) {
+            if (response === "success") {
+              alert("Login successful!");
+              window.location.href = "index.html";
+            } else {
+              alert("Login failed. Please check your credentials.");
+            }
+          })
+          .checkLogin(email, password);
+      });
+    </script>
+  </body>
+</html>
