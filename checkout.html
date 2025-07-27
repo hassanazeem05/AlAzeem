@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout - AL AZEEM</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+    header {
+      background: #111;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #111;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background: #222;
+      color: #fff;
+    }
+    .summary {
+      margin-top: 20px;
+      font-size: 16px;
+      background: #222;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header>Checkout</header>
+  <div class="container">
+    <form id="checkoutForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="address">Shipping Address:</label>
+      <input type="text" id="address" required>
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" required>
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" required>
+
+      <div class="summary">
+        <p><strong>Product:</strong> <span id="productName"></span></p>
+        <p><strong>Total:</strong> <span id="productPrice"></span></p>
+      </div>
+
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <script>
+    // Auto-fill product and total from URL
+    const params = new URLSearchParams(window.location.search);
+    const product = params.get("product") || "N/A";
+    const total = params.get("total") || "N/A";
+    document.getElementById("productName").textContent = product;
+    document.getElementById("productPrice").textContent = total;
+
+    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const address = document.getElementById("address").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      // Send order to Google Sheets via Apps Script
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          address,
+          email,
+          phone,
+          product,
+          total,
+          adminEmail: "alazeem0518@gmail.com"
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.result === "success") {
+          window.location.href = "thankyou.html";
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      })
+      .catch(error => {
+        console.error("Error!", error.message);
+        alert("Something went wrong!");
+      });
+    });
+  </script>
+</body>
+                                       </html>
