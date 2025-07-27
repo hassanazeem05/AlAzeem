@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>AL AZEEM - Home</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #111;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        background-color: #222;
+        padding: 10px;
+      }
+      nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+      }
+      .products {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
+      }
+      .product {
+        background-color: #222;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        width: 200px;
+        text-align: center;
+      }
+      .product img {
+        max-width: 100%;
+        border-radius: 10px;
+      }
+      .filter {
+        text-align: center;
+        margin: 20px;
+      }
+      select {
+        padding: 10px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>AL AZEEM</header>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html">Login</a>
+    </nav>
+
+    <div class="filter">
+      <label for="category">Filter by Category:</label>
+      <select id="category" onchange="filterProducts()">
+        <option value="ALL">All</option>
+        <option value="MEN_TOP">Men - Top</option>
+        <option value="MEN_BOTTOM">Men - Bottom</option>
+        <option value="MEN_SHOES">Men - Shoes</option>
+        <option value="WOMEN_TOP">Women - Top</option>
+        <option value="WOMEN_BOTTOM">Women - Bottom</option>
+        <option value="WOMEN_SHOES">Women - Shoes</option>
+        <option value="KIDS_TOP">Kids - Top</option>
+        <option value="KIDS_BOTTOM">Kids - Bottom</option>
+        <option value="KIDS_SHOES">Kids - Shoes</option>
+      </select>
+    </div>
+
+    <div class="products" id="product-list">
+      <!-- Products will load here -->
+    </div>
+
+    <script>
+      let products = [];
+
+      function loadProducts() {
+        google.script.run.withSuccessHandler(displayProducts).getProducts();
+      }
+
+      function displayProducts(data) {
+        products = data;
+        renderProducts(data);
+      }
+
+      function renderProducts(data) {
+        const list = document.getElementById("product-list");
+        list.innerHTML = "";
+        data.forEach((p) => {
+          const div = document.createElement("div");
+          div.className = "product";
+          div.innerHTML = `
+            <img src="${p.image}" alt="${p.name}" />
+            <h3>${p.name}</h3>
+            <p>${p.description}</p>
+            <p><strong>${p.category}</strong></p>
+            <button onclick="addToCart('${p.name}')">Add to Cart</button>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      function filterProducts() {
+        const category = document.getElementById("category").value;
+        if (category === "ALL") {
+          renderProducts(products);
+        } else {
+          const filtered = products.filter((p) => p.category === category);
+          renderProducts(filtered);
+        }
+      }
+
+      function addToCart(productName) {
+        alert(productName + " added to cart.");
+        // Add cart logic here if needed
+      }
+
+      window.onload = loadProducts;
+    </script>
+  </body>
+</html>
