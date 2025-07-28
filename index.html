@@ -133,6 +133,32 @@
       }
 
       window.onload = loadProducts;
-    </script>
+    <script>
+  // Replace with your actual deployed Apps Script URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwGk3VLeotRPl406fa_mLnn3nGWmz_e-k2vc1XdfxWH_EpzcrforgKGY--U9Em9qwTK/exec?action=getProducts";
+
+  fetch(scriptURL)
+    .then(response => response.json())
+    .then(products => {
+      const container = document.getElementById('product-container');
+      container.innerHTML = ''; // clear any existing content
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product['Image URL']}" alt="${product.Name}" class="product-image">
+          <h3>${product.Name}</h3>
+          <p>${product.Description}</p>
+          <p><strong>PKR ${product.Price}</strong></p>
+          <a href="cart.html?product=${encodeURIComponent(product.Name)}&price=${product.Price}" class="btn">Add to Cart</a>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching products:', error);
+    });
+</script>
   </body>
 </html>
